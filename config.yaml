@@ -1,0 +1,300 @@
+# AI Multi-Agent Research Assistant Configuration
+# Professional-grade configuration for production deployment
+
+app:
+  name: "AI Multi-Agent Research Assistant"
+  version: "2.0.0"
+  description: "Advanced AI system with NLP, Generative AI, and Multi-Agent Intelligence"
+  debug: false
+  log_level: "INFO"
+
+# Model Configuration
+models:
+  # Embedding Models
+  embedding:
+    primary: "sentence-transformers/all-MiniLM-L6-v2"
+    alternatives:
+      - "sentence-transformers/all-mpnet-base-v2"
+      - "sentence-transformers/distilbert-base-nli-stsb-mean-tokens"
+  
+  # Language Models
+  language_models:
+    sentiment: "cardiffnlp/twitter-roberta-base-sentiment-latest"
+    ner: "dbmdz/bert-large-cased-finetuned-conll03-english"
+    summarization: "facebook/bart-large-cnn"
+    qa: "deepset/roberta-base-squad2"
+    generation: "gpt2-medium"
+    classification: "facebook/bart-large-mnli"
+    translation: "t5-base"
+  
+  # Model Parameters
+  parameters:
+    temperature: 0.7
+    top_p: 0.9
+    top_k: 50
+    max_new_tokens: 512
+    max_context_length: 4096
+    batch_size: 8
+    device: "auto"  # auto, cpu, cuda
+
+# Agent Configuration
+agents:
+  nlu:
+    enabled: true
+    capabilities:
+      - "intent_classification"
+      - "entity_extraction"
+      - "sentiment_analysis"
+      - "emotion_detection"
+      - "language_detection"
+      - "text_classification"
+    max_concurrent_requests: 10
+    timeout: 30
+  
+  generative:
+    enabled: true
+    capabilities:
+      - "text_generation"
+      - "summarization"
+      - "question_answering"
+      - "creative_writing"
+      - "code_generation"
+      - "translation"
+    max_concurrent_requests: 5
+    timeout: 60
+  
+  research:
+    enabled: true
+    capabilities:
+      - "web_scraping"
+      - "knowledge_synthesis"
+      - "fact_checking"
+      - "research_planning"
+      - "source_validation"
+      - "trend_analysis"
+    max_concurrent_requests: 3
+    timeout: 120
+
+# Database Configuration
+database:
+  # Primary Database
+  primary:
+    type: "sqlite"
+    url: "sqlite:///ai_assistant.db"
+    echo: false
+    pool_size: 10
+    max_overflow: 20
+  
+  # Redis Cache
+  cache:
+    type: "redis"
+    url: "redis://localhost:6379/0"
+    ttl: 3600
+    max_connections: 10
+  
+  # Alternative PostgreSQL (for production)
+  postgresql:
+    enabled: false
+    host: "localhost"
+    port: 5432
+    database: "ai_assistant"
+    username: "ai_user"
+    password: "${DB_PASSWORD}"
+    pool_size: 20
+
+# Web Configuration
+web:
+  # Streamlit
+  streamlit:
+    port: 8501
+    host: "0.0.0.0"
+    max_upload_size: 200  # MB
+    theme:
+      primaryColor: "#667eea"
+      backgroundColor: "#ffffff"
+      secondaryBackgroundColor: "#f0f2f6"
+      textColor: "#262730"
+  
+  # FastAPI (for API endpoints)
+  api:
+    enabled: true
+    port: 8000
+    host: "0.0.0.0"
+    cors_origins:
+      - "http://localhost:3000"
+      - "http://localhost:8501"
+    rate_limit:
+      requests_per_minute: 60
+      burst_size: 10
+
+# Security Configuration
+security:
+  # API Keys (use environment variables in production)
+  api_keys:
+    openai: "${OPENAI_API_KEY}"
+    huggingface: "${HUGGINGFACE_API_KEY}"
+    google: "${GOOGLE_API_KEY}"
+  
+  # Session Management
+  session:
+    secret_key: "${SESSION_SECRET_KEY}"
+    expire_minutes: 1440  # 24 hours
+    algorithm: "HS256"
+  
+  # Rate Limiting
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+    requests_per_hour: 1000
+    requests_per_day: 10000
+
+# Research Configuration
+research:
+  # Web Scraping
+  web_scraping:
+    user_agent: "AI-Research-Assistant/2.0"
+    timeout: 10
+    max_retries: 3
+    delay_between_requests: 1.0
+    respect_robots_txt: true
+  
+  # Search APIs
+  search_apis:
+    google:
+      enabled: false
+      api_key: "${GOOGLE_SEARCH_API_KEY}"
+      cx: "${GOOGLE_SEARCH_CX}"
+    
+    bing:
+      enabled: false
+      api_key: "${BING_SEARCH_API_KEY}"
+    
+    arxiv:
+      enabled: true
+      base_url: "http://export.arxiv.org/api/query"
+  
+  # Knowledge Base
+  knowledge_base:
+    auto_update: true
+    update_interval_hours: 24
+    max_entries: 10000
+    embedding_dimensions: 384
+
+# Memory Management
+memory:
+  # Working Memory
+  working_memory:
+    max_size: 10
+    cleanup_interval_minutes: 30
+  
+  # Long-term Memory
+  long_term_memory:
+    max_size: 1000
+    compression_threshold: 100
+    semantic_indexing: true
+  
+  # Episodic Memory
+  episodic_memory:
+    retention_days: 30
+    auto_cleanup: true
+
+# Monitoring and Logging
+monitoring:
+  # Metrics
+  metrics:
+    enabled: true
+    export_interval_seconds: 60
+    retention_days: 7
+  
+  # Health Checks
+  health_checks:
+    enabled: true
+    interval_seconds: 30
+    timeout_seconds: 5
+  
+  # Performance Monitoring
+  performance:
+    track_response_times: true
+    track_memory_usage: true
+    track_error_rates: true
+    alert_thresholds:
+      response_time_ms: 5000
+      error_rate_percent: 5.0
+      memory_usage_percent: 85.0
+
+# Development Configuration
+development:
+  # Auto-reload
+  auto_reload: true
+  
+  # Debug Features
+  debug_mode: false
+  verbose_logging: false
+  
+  # Testing
+  test_mode: false
+  mock_external_apis: false
+
+# Production Configuration
+production:
+  # Optimization
+  optimize_models: true
+  use_model_cache: true
+  
+  # Scaling
+  worker_processes: 4
+  max_concurrent_users: 100
+  
+  # Backup
+  backup:
+    enabled: true
+    interval_hours: 6
+    retention_days: 30
+    storage_path: "/backup/ai-assistant"
+
+# External Integrations
+integrations:
+  # Hugging Face Hub
+  huggingface:
+    use_auth_token: true
+    cache_dir: "./models"
+    offline_mode: false
+  
+  # OpenAI
+  openai:
+    enabled: false
+    model: "gpt-3.5-turbo"
+    max_tokens: 1000
+    temperature: 0.7
+  
+  # Google Services
+  google:
+    search_enabled: false
+    translate_enabled: false
+    
+  # Social Media APIs
+  social_media:
+    twitter_enabled: false
+    reddit_enabled: false
+
+# Feature Flags
+features:
+  # Experimental Features
+  experimental:
+    advanced_reasoning: true
+    multi_modal_support: false
+    real_time_learning: false
+  
+  # UI Features
+  ui:
+    dark_mode: true
+    advanced_analytics: true
+    code_editor: true
+    data_visualization: true
+  
+  # AI Features
+  ai:
+    chain_of_thought: true
+    self_reflection: true
+    confidence_scoring: true
+    source_attribution: true
